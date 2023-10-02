@@ -1,27 +1,36 @@
-import type { Component } from 'solid-js';
+import { createSignal } from 'solid-js';
+import { fetchAnalyticsData } from './api';
 
-import styles from './App.module.css';
-import logo from './logo.svg';
+function App() {
+  const [data, setData] = createSignal<any>(null);
+  const [error, setError] = createSignal<any>(null);
 
-const App: Component = () => {
+  const apiKey = import.meta.env.API_KEY || "";
+  const from = "2023-08-04";
+  const to = "2023-09-04";
+  const categoryValue = ["44c0823fbdf0aed3fa2d6357", "3742b06f9e13c9ea22a8d599"];
+
+  // Fetch data on component mount
+  (async () => {
+    try {
+      const result = await fetchAnalyticsData(apiKey, from, to, categoryValue);
+      setData(result);
+    } catch (err) {
+      setError(err);
+    }
+  })();
+
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
+    <div>
+      {error() && error().message && <p>Error: {error().message}</p>}
+      {data() && (
+        <div>
+          {/* Render your data here */}
+          <pre>{JSON.stringify(data(), null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default App;
