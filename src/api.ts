@@ -1,10 +1,10 @@
-
 import axios from 'axios';
 
-const BASE_URL = "https://portal-dwh-service-staging-xs3c3zjjbq-ue.a.run.app/api/v1";
+const BASE_URL = "/api";
 
 export const fetchAnalyticsData = async (apiKey: string, from: string, to: string, categoryValue: string[]) => {
-    const endpoint = `/analytics/relays/daily/application_id`;
+    // Adjusted the endpoint to match the curl command
+    const endpoint = `/analytics/relays/aggregated/application_id`;
     const headers = {
         "Portal-DWH-Service-Api-Key": apiKey,
         "Content-Type": "application/json"

@@ -4,16 +4,20 @@ import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
   plugins: [
-    /* 
-    Uncomment the following line to enable solid-devtools.
-    For more info see https://github.com/thetarnav/solid-devtools/tree/main/packages/extension#readme
-    */
     // devtools(),
     solidPlugin(),
   ],
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://portal-dwh-service-staging-xs3c3zjjbq-ue.a.run.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api/v1')
+      }
+    }
   },
+
   build: {
     target: 'esnext',
   },
